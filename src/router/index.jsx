@@ -6,6 +6,7 @@ import CommunityListPage from '@/pages/community/CommunityListPage'
 import CommunityNewPage from '@/pages/community/CommunityNewPage'
 import CommunityDetailPage from '@/pages/community/CommunityDetailPage'
 import BooksPage from '@/pages/books/BooksPage'
+import QuotesPage from '@/pages/quotes/QuotesPage'
 import MyPage from '@/pages/mypage/MyPage'
 import LoginPage from '@/pages/auth/LoginPage'
 import NotFoundPage from '@/pages/NotFoundPage'
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: 'books',
         element: <ProtectedRoute><BooksPage /></ProtectedRoute>,
+      },
+      {
+        path: 'quotes',
+        element: <ProtectedRoute><QuotesPage /></ProtectedRoute>,
       },
       {
         path: 'mypage',
