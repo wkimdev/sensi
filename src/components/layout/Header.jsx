@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router'
-import { Menu, User, LogOut, LayoutDashboard } from 'lucide-react'
+import { Menu, LogOut, Heart, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -15,15 +15,13 @@ import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/authStore'
 
-// 네비게이션 링크 목록
+// 로그인 후 표시되는 네비게이션
 const navLinks = [
   { href: '/', label: '홈' },
-  { href: '/about', label: '소개' },
-  { href: '/counter', label: '카운터' },
-  { href: '/dashboard', label: '대시보드' },
+  { href: '/community', label: '커뮤니티' },
+  { href: '/books', label: '도서' },
 ]
 
-// NavLink 컴포넌트를 Header 외부에서 정의
 const NavLink = ({ href, label, onClick }) => {
   const { pathname } = useLocation()
   return (
@@ -48,16 +46,20 @@ export default function Header() {
       <div className="container mx-auto flex h-14 items-center px-4">
         {/* 로고 */}
         <Link to="/" className="mr-6 flex items-center space-x-2 font-bold text-primary">
-          <LayoutDashboard className="h-5 w-5" />
-          <span>StarterKit</span>
+          <Heart className="h-5 w-5" />
+          <span>센시</span>
         </Link>
 
         {/* 데스크탑 네비게이션 */}
-        <nav className="hidden md:flex items-center gap-6 flex-1">
-          {navLinks.map((link) => (
-            <NavLink key={link.href} {...link} />
-          ))}
-        </nav>
+        {user && (
+          <nav className="hidden md:flex items-center gap-6 flex-1">
+            {navLinks.map((link) => (
+              <NavLink key={link.href} {...link} />
+            ))}
+          </nav>
+        )}
+
+        {!user && <div className="flex-1" />}
 
         <div className="flex items-center gap-2 ml-auto">
           {/* 유저 메뉴 */}
@@ -79,9 +81,9 @@ export default function Header() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/dashboard">
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
-                    대시보드
+                  <Link to="/mypage">
+                    <User className="mr-2 h-4 w-4" />
+                    마이페이지
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -93,11 +95,8 @@ export default function Header() {
             </DropdownMenu>
           ) : (
             <div className="hidden md:flex items-center gap-2">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/login">로그인</Link>
-              </Button>
               <Button size="sm" asChild>
-                <Link to="/register">회원가입</Link>
+                <Link to="/login">로그인</Link>
               </Button>
             </div>
           )}
@@ -114,29 +113,25 @@ export default function Header() {
               <SheetHeader>
                 <SheetTitle>
                   <Link to="/" className="flex items-center gap-2 text-primary">
-                    <LayoutDashboard className="h-5 w-5" />
-                    StarterKit
+                    <Heart className="h-5 w-5" />
+                    센시
                   </Link>
                 </SheetTitle>
               </SheetHeader>
               <Separator className="my-4" />
-              <nav className="flex flex-col gap-3">
-                {navLinks.map((link) => (
-                  <NavLink key={link.href} {...link} />
-                ))}
-              </nav>
-              {!user && (
-                <>
-                  <Separator className="my-4" />
-                  <div className="flex flex-col gap-2">
-                    <Button variant="outline" asChild>
-                      <Link to="/login">로그인</Link>
-                    </Button>
-                    <Button asChild>
-                      <Link to="/register">회원가입</Link>
-                    </Button>
-                  </div>
-                </>
+              {user ? (
+                <nav className="flex flex-col gap-3">
+                  {navLinks.map((link) => (
+                    <NavLink key={link.href} {...link} />
+                  ))}
+                  <NavLink href="/mypage" label="마이페이지" />
+                </nav>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <Button asChild>
+                    <Link to="/login">로그인</Link>
+                  </Button>
+                </div>
               )}
             </SheetContent>
           </Sheet>
